@@ -1,31 +1,57 @@
 #include "sort.h"
 
 /**
-  * shell_sort - shell sort, knuth sequence
-  * @array: array to be sorted
-  * @size: size of array
-  *
-  * Return: nothing.
-  */
+ * knuth_seq - Find largest gap for a given size
+ * @size: Size of the array
+ * Return: Void
+ */
+
+size_t knuth_seq(size_t size)
+{
+	size_t counter;
+
+	for (counter = 1; counter < size; counter = (counter * 3) + 1)
+	{
+		;
+	}
+	return ((counter - 1) / 3);
+}
+
+
+/**
+ * shell_sort - Sorts an array of integers
+ * @array: The array to be sorted
+ * @size: Size of the array
+ * Return: Void
+ */
+
 void shell_sort(int *array, size_t size)
 {
-	size_t knuth, i, i2;
-	int tmp;
+	size_t gap, i, j;
+	int temp;
 
-	knuth = 1;
-	while (knuth < size)
-		knuth = (knuth * 3) + 1;
-	knuth = (knuth - 1) / 3;
-	while (knuth > 0)
+    /*Check inputs*/
+	if (array == NULL || size == 0)
 	{
-		for (i = knuth; i < size; i++)
+		return;
+	}
+
+	/* Begin gap at largest knuth seq. For each pass, reduce gap by 1/3*/
+	for (gap = knuth_seq(size); gap; gap = (gap - 1) / 3)
+	{
+		/* Check elements to the right of gap */
+		for (i = gap; i < size; i++)
 		{
-			tmp = array[i];
-			for (i2 = i; i2 >= knuth && array[i2 - knuth] > tmp; i2 -= knuth)
-				array[i2] = array[i2 - knuth];
-			array[i2] = tmp;
+			/* Save elements in first gap to array[counter1]*/
+			temp = array[i];
+
+			/* Shift gapped element left until array[i] is in correct position*/
+			for (j = i; j > gap - 1 && array[j - gap] > temp; j -= gap)
+			{
+				array[j] = array[j - gap];
+			}
+			array[j] = temp;
 		}
-		knuth = (knuth - 1) / 3;
 		print_array(array, size);
 	}
 }
