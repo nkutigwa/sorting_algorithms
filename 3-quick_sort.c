@@ -1,94 +1,76 @@
 #include "sort.h"
 
 /**
- * _swap - swap two numbers.
- * @a: integer
- * @b: integer
- *
- * Return: nothing.
+ * swap - swap two numbers
+ * @a: first number
+ * @b: second number
  **/
-void _swap(int *a, int *b)
+void swap(int *a, int *b)
 {
-	int tmp;
-
-	tmp = *a;
+	int temp = *a;
 	*a = *b;
-	*b = tmp;
-
+	*b = temp;
 }
 
 /**
- * _split - Split the array and takes the last element as pivot
- * @arr: Array
- * @min: first element
- * @last: The last element
+ * partition - split array around pivot
+ * @arr: array
+ * @first: first element
+ * @last: last element
  * @size: size
- * 
- * Return: integer.
- **/
-int _split(int *arr, int min, int last, size_t size)
+ * Return: i
+ */
+int partition(int *arr, int first, int last, size_t size)
 {
-	int piv;
-	int i = (min);
+	int pivot = arr[last];
+	int i = first;
 	int j;
 
-	piv = arr[last];
-	for (j = min; j < last; j++)
+	for (j = first; j < last; j++)
 	{
-		if (arr[j] <= piv)
+		if (arr[j] <= pivot)
 		{
-
-			_swap(&arr[i], &arr[j]);
-
-
+			swap(&arr[i], &arr[j]);
 			if (i != j)
 				print_array(arr, size);
-
 			i++;
-
 		}
 	}
-
-	_swap(&arr[i], &arr[last]);
+	swap(&arr[i], &arr[last]);
 	if (i != j)
 		print_array(arr, size);
-
 	return (i);
 }
 
 /**
- * quick_sort_array - quick_sort_array
- * @arr: arr
- * @min: min
- * @last: last
+ * quickSort - sort a part of the list
+* @arr: array
+ * @first: first element
+ * @last: last element
  * @size: size
- * 
- * Return: nothing.
+ * Return: nothing
  */
-void quick_sort_array(int *arr, int min, int last, size_t size)
+void quickSort(int *arr, int first, int last, size_t size)
 {
+	int pivot;
 
-	int piv;
-
-	if (min < last)
+	if (first < last)
 	{
-		piv = _split(arr, min, last, size);
-		quick_sort_array(arr, min, (piv - 1), size);
-		quick_sort_array(arr, (piv + 1), last, size);
+		pivot = partition(arr, first, last, size);
+		quickSort(arr, first, pivot - 1, size);
+		quickSort(arr, pivot + 1, last, size);
 	}
 }
 
 /**
- * quick_sort -Sort an array using quick_sort algorithm
+ * quick_sort - quick sort method array
  * @array: array
  * @size: size
- *
- * Return: nothing.
- **/
+ * Return: nothing
+ */
 void quick_sort(int *array, size_t size)
 {
 	if (size < 2)
 		return;
-
-	quick_sort_array(array, 0, size - 1, size);
+	quickSort(array, 0, size - 1, size);
 }
